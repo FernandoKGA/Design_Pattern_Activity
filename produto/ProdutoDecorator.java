@@ -1,19 +1,13 @@
 package produto;
 
+import static enumeradores.Enum_Formatos.*;
 
-public class ProdutoDecorator implements Produto {
+public abstract class ProdutoDecorator implements Produto {
 
-    private final Produto produto;
+    protected final Produto produto;
 
-    private final int format_flags;
-
-    public static final int FORMATO_PADRAO = 0b0000;
-    public static final int FORMATO_NEGRITO = 0b0001;
-    public static final int FORMATO_ITALICO = 0b0010;
-
-    public ProdutoDecorator(Produto produto, int format_flags) {
+    public ProdutoDecorator(Produto produto) {
         this.produto = produto;
-        this.format_flags = format_flags;
     }
     
     @Override
@@ -52,24 +46,24 @@ public class ProdutoDecorator implements Produto {
     }
 
     @Override
-    public String formataParaImpressao() {
+    public abstract String formataParaImpressao(); /*{
         String impressao = "";
-        if ((format_flags & FORMATO_ITALICO) > 0) {
+        if ((format_flags & FORMATO_ITALICO.getBit()) > 0) {
             impressao += "<i>";
         }
-        if ((format_flags & FORMATO_NEGRITO) > 0) {
+        if ((format_flags & FORMATO_NEGRITO.getBit()) > 0) {
             impressao += "<b>";
         }
         
         impressao += this.produto.formataParaImpressao();
         
-        if ((format_flags & FORMATO_NEGRITO) > 0) {
+        if ((format_flags & FORMATO_NEGRITO.getBit()) > 0) {
             impressao += "</b>";
         }
 
-        if ((format_flags & FORMATO_ITALICO) > 0) {
+        if ((format_flags & FORMATO_ITALICO.getBit()) > 0) {
             impressao += ("</i>");
         }
         return impressao;
-    }
+    }*/
 }

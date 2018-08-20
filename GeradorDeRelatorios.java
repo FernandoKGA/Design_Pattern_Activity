@@ -1,61 +1,52 @@
-
 import produto.*;
 import filtro.*;
 import algoritmo.*;
 import criterio.*;
+import enumeradores.*;
 import java.io.PrintWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class GeradorDeRelatorios {
 
-    //Algoritmos
-    public static final int ALG_INSERTIONSORT = 0;
-    public static final int ALG_QUICKSORT = 1;
-
-    //Criterio crescente
-    public static final int CRIT_DESC_CRESC = 0;
-    public static final int CRIT_PRECO_CRESC = 1;
-    public static final int CRIT_ESTOQUE_CRESC = 2;
-
-    //Criterio decrescente
-    public static final int CRIT_DESC_DECRE = 3;
-    public static final int CRIT_PRECO_DECRE = 4;
-    public static final int CRIT_ESTOQUE_DECRE = 5;
-
-    //Filtros
-    public static final int FILTRO_TODOS = 0;
-    public static final int FILTRO_ESTOQUE_MENOR_OU_IQUAL_A = 1;
-    public static final int FILTRO_CATEGORIA_IGUAL_A = 2;
-
-    // operador bit a bit "ou" pode ser usado para combinar mais de  
-    // um estilo de formatacao simultaneamente (veja exemplo no main)
-    public static final int FORMATO_PADRAO = 0b0000;
-    public static final int FORMATO_NEGRITO = 0b0001;
-    public static final int FORMATO_ITALICO = 0b0010;
-
     private Produto[] produtos;
-    private final int algoritmo;
+    private final Enum_Algoritmos algoritmo;
     private Criterio criterio;
-    private final int criterio_define;
-    private final int format_flags;
-    private final int filtro_define;
-    private final Object argFiltro;
+    private final Enum_Criterios criterio_define;
+    private final Enum_Filtros filtro_define;
+    private Object argFiltro;
     private Filtro filtro;
+    private HashMap<Produto,Produto> formatacao;
 
-    public GeradorDeRelatorios(Produto[] produtos, int algoritmo,
-            int criterio_define, int format_flags, int filtro_define,
-            Object argFiltro) {
+    public GeradorDeRelatorios(Produto[] produtos, Enum_Algoritmos algoritmo,
+            Enum_Criterios criterio_define, int format_flags,
+            Enum_Filtros filtro_define, Object argFiltro, HashMap<Produto,Produto> formatacao) {
 
         this.produtos = produtos;
         this.algoritmo = algoritmo;
         this.criterio_define = criterio_define;
         selecionaCriterio();
-        this.format_flags = format_flags;
+        
         this.filtro_define = filtro_define;
         this.argFiltro = argFiltro;
+        this.formatacao = formatacao;
+    }
+    
+    public GeradorDeRelatorios(Produto[] produtos, Enum_Algoritmos algoritmo,
+            Enum_Criterios criterio_define, int format_flags,
+            Enum_Filtros filtro_define, HashMap<Produto,Produto> formatacao) {
+
+        this.produtos = produtos;
+        this.algoritmo = algoritmo;
+        this.criterio_define = criterio_define;
+        selecionaCriterio();
+        
+        this.filtro_define = filtro_define;
+        this.formatacao = formatacao;
     }
     
     private void selecionaCriterio(){
+        
         switch(criterio_define){
             case CRIT_DESC_CRESC:
                 criterio = new Criterio_Desc_Crescente();
@@ -102,6 +93,7 @@ public class GeradorDeRelatorios {
         }
     }
 
+    //Método que vai gerar o relatório
     public void geraRelatorio(String arquivoSaida) throws IOException {
 
         ordena();
@@ -132,16 +124,14 @@ public class GeradorDeRelatorios {
             }
         }
         
+        boolean selecionado;
         for (Produto p : produtos) {
-            boolean selecionado = false;
-            
-            if(filtro.compara(p, argFiltro)){
-                selecionado = true;
-            }
+            selecionado = filtro.compara(p, argFiltro);
             
             if (selecionado) {
                 out.print("<li>");
-                Produto produto_decorador = new ProdutoDecorator(p, format_flags);
+                //Arrumar aqui
+                Produto produto_decorador = formatacao.get(p);
                 out.print(produto_decorador.formataParaImpressao());
                 out.println("</li>");
                 count++;

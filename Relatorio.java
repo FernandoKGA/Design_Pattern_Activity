@@ -1,12 +1,11 @@
 import java.io.IOException;
 import produto.Produto;
 import produto.ProdutoPadrao;
-import enumeradores.*;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import static enumeradores.Enum_Algoritmos.*;
+import static enumeradores.Enum_Criterios.*;
+import static enumeradores.Enum_Filtros.*;
+import static enumeradores.Enum_Formatos.*;
+import java.util.HashMap;
 
 /**
  *
@@ -50,20 +49,26 @@ public class Relatorio {
             new ProdutoPadrao(32, "The Art of Computer Programming Vol. 3", "Livros", 4, 270.00)
         };
     }
+    
+    public static HashMap<Produto,Produto> personaliza(Produto[] produtos){
+        HashMap<Produto,Produto> personalizados = new HashMap<>();
+        
+        return personalizados;
+    }
 
     public static void main(String[] args) {
 
         Produto[] produtos = carregaProdutos();
-
+        
+        HashMap<Produto,Produto> personalizados = null;
+        personalizados = personaliza(produtos);
+        
         GeradorDeRelatorios gdr;
 
-        gdr = new GeradorDeRelatorios(produtos, Enum_Algoritmos.ALG_QUICKSORT.getAlg(), 
-                Enum_Criterios.CRIT_PRECO_DECRE.getValor(),
-                Enum_Formatos.FORMATO_PADRAO.getBit() |
-                        Enum_Formatos.FORMATO_NEGRITO.getBit() | 
-                        Enum_Formatos.FORMATO_ITALICO.getBit(),
-                //FILTRO_ESTOQUE_MENOR_OU_IQUAL_A, 100);
-                Enum_Filtros.FILTRO_CATEGORIA_IGUAL_A.getValor(), "Livros");
+        gdr = new GeradorDeRelatorios(produtos, ALG_QUICKSORT, CRIT_PRECO_DECRE,
+                FORMATO_PADRAO.getBit() | FORMATO_NEGRITO.getBit() | 
+                    FORMATO_ITALICO.getBit(),
+                FILTRO_CATEGORIA_IGUAL_A, "Livros",personalizados);
 
         try {
             gdr.geraRelatorio("saida.html");
