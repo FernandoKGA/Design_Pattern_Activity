@@ -5,6 +5,8 @@ import static enumeradores.Enum_Algoritmos.*;
 import static enumeradores.Enum_Criterios.*;
 import static enumeradores.Enum_Filtros.*;
 import static enumeradores.Enum_Formatos.*;
+import formatacao.*;
+import formatacao.cor.*;
 import java.util.HashMap;
 
 /**
@@ -52,7 +54,12 @@ public class Relatorio {
     
     public static HashMap<Produto,Produto> personaliza(Produto[] produtos){
         HashMap<Produto,Produto> personalizados = new HashMap<>();
-        
+        personalizados.put(produtos[0], new Italico(new Negrito(new Roxo(produtos[0]))));
+        personalizados.put(produtos[1], new Negrito(new Rosa(produtos[1])));
+        personalizados.put(produtos[3], new Italico(new Preto(produtos[3])));
+        personalizados.put(produtos[31], new Padrao(new Italico(new Vermelho(produtos[31]))));
+        personalizados.put(produtos[30], new Padrao(new Italico(new Verde(produtos[30]))));
+        personalizados.put(produtos[27], new Padrao(new Negrito(new Azul(produtos[27]))));
         return personalizados;
     }
 
@@ -66,10 +73,10 @@ public class Relatorio {
         GeradorDeRelatorios gdr;
 
         gdr = new GeradorDeRelatorios(produtos, ALG_QUICKSORT, CRIT_PRECO_DECRE,
-                FORMATO_PADRAO.getBit() | FORMATO_NEGRITO.getBit() | 
-                    FORMATO_ITALICO.getBit(),
-                FILTRO_CATEGORIA_IGUAL_A, "Livros",personalizados);
+                FILTRO_INTERVALO_PRECO, "10.00; 500.00",personalizados);
 
+        //gdr = new GeradorDeRelatorios(produtos, new InsertionSort(), new EstoqueCrescente(), new IntervaloDePrecos(), "10.00; 500.00", personalizar);
+        //gdr = new GeradorDeRelatorios(produtos, new QuickSort(), new EstoqueDecrescente(), new Todos(), personalizar);
         try {
             gdr.geraRelatorio("saida.html");
         } catch (IOException e) {

@@ -16,31 +16,30 @@ public class GeradorDeRelatorios {
     private final Enum_Filtros filtro_define;
     private Object argFiltro;
     private Filtro filtro;
-    private HashMap<Produto,Produto> formatacao;
+    private final HashMap<Produto,Produto> formatacao;
+    private Produto prod_formatado;
 
     public GeradorDeRelatorios(Produto[] produtos, Enum_Algoritmos algoritmo,
-            Enum_Criterios criterio_define, int format_flags,
-            Enum_Filtros filtro_define, Object argFiltro, HashMap<Produto,Produto> formatacao) {
+            Enum_Criterios criterio_define, Enum_Filtros filtro_define,
+            Object argFiltro, HashMap<Produto,Produto> formatacao) {
 
         this.produtos = produtos;
         this.algoritmo = algoritmo;
         this.criterio_define = criterio_define;
         selecionaCriterio();
-        
         this.filtro_define = filtro_define;
         this.argFiltro = argFiltro;
         this.formatacao = formatacao;
     }
     
     public GeradorDeRelatorios(Produto[] produtos, Enum_Algoritmos algoritmo,
-            Enum_Criterios criterio_define, int format_flags,
-            Enum_Filtros filtro_define, HashMap<Produto,Produto> formatacao) {
+            Enum_Criterios criterio_define, Enum_Filtros filtro_define,
+            HashMap<Produto,Produto> formatacao) {
 
         this.produtos = produtos;
         this.algoritmo = algoritmo;
         this.criterio_define = criterio_define;
         selecionaCriterio();
-        
         this.filtro_define = filtro_define;
         this.formatacao = formatacao;
     }
@@ -119,6 +118,13 @@ public class GeradorDeRelatorios {
                 case FILTRO_CATEGORIA_IGUAL_A:
                     filtro = new Filtro_Categoria();
                     break;
+                case FILTRO_INTERVALO_PRECO:
+                    filtro = new Filtro_IntervalorDePreco();
+                    break;
+                case FILTRO_SUBSTRING:
+                    filtro = new Filtro_Substring();
+                    break;
+                    
                 default:
                     throw new RuntimeException("Filtro inválido!");
             }
@@ -130,9 +136,14 @@ public class GeradorDeRelatorios {
             
             if (selecionado) {
                 out.print("<li>");
-                //Arrumar aqui
-                Produto produto_decorador = formatacao.get(p);
-                out.print(produto_decorador.formataParaImpressao());
+                
+                if(formatacao.containsKey(p)){
+                    //Se encontra no HashMap
+                    prod_formatado = formatacao.get(p);
+                    out.print(prod_formatado.formataParaImpressao());
+                } else{
+                    out.print(p.formataParaImpressao());
+                }
                 out.println("</li>");
                 count++;
             }

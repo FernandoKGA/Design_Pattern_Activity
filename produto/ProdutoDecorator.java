@@ -1,7 +1,5 @@
 package produto;
 
-import static enumeradores.Enum_Formatos.*;
-
 public abstract class ProdutoDecorator implements Produto {
 
     protected final Produto produto;
@@ -46,24 +44,5 @@ public abstract class ProdutoDecorator implements Produto {
     }
 
     @Override
-    public abstract String formataParaImpressao(); /*{
-        String impressao = "";
-        if ((format_flags & FORMATO_ITALICO.getBit()) > 0) {
-            impressao += "<i>";
-        }
-        if ((format_flags & FORMATO_NEGRITO.getBit()) > 0) {
-            impressao += "<b>";
-        }
-        
-        impressao += this.produto.formataParaImpressao();
-        
-        if ((format_flags & FORMATO_NEGRITO.getBit()) > 0) {
-            impressao += "</b>";
-        }
-
-        if ((format_flags & FORMATO_ITALICO.getBit()) > 0) {
-            impressao += ("</i>");
-        }
-        return impressao;
-    }*/
+    public abstract String formataParaImpressao();
 }

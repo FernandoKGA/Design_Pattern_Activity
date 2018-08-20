@@ -13,7 +13,9 @@ public enum Enum_Filtros {
     
     FILTRO_TODOS(0),
     FILTRO_ESTOQUE_MENOR_OU_IQUAL_A(1),
-    FILTRO_CATEGORIA_IGUAL_A(2);
+    FILTRO_CATEGORIA_IGUAL_A(2),
+    FILTRO_INTERVALO_PRECO(3),
+    FILTRO_SUBSTRING(4);
     
     private final int valor;
     
